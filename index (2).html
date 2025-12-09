@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    input { width: 200px; height: 30px; text-align: right; font-size: 18px; }
+    button { width: 50px; height: 50px; font-size: 18px; margin: 2px; }
+  </style>
+</head>
+<body>
+  <h2>Калькулятор</h2>
+  <input type="text" id="display" disabled placeholder="0"><br>
+
+  <!-- Цифры -->
+  <div>
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button onclick="chooseOperation('/')">/</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button onclick="chooseOperation('*')">*</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button onclick="chooseOperation('-')">-</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="appendNumber('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="chooseOperation('+')">+</button>
+  </div>
+
+  <!-- Дополнительные операции -->
+  <div>
+    <button onclick="chooseOperation('%')">%</button>
+    <button onclick="sqrtNumber()">√</button>
+    <button onclick="chooseOperation('^')">x^y</button>
+    <button onclick="clearDisplay()">C</button>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    let currentNumber = '';
+    let previousNumber = '';
+    let operation = null;
+
+    function appendNumber(num) {
+      currentNumber += num;
+      updateDisplay();
+    }
+
+    function chooseOperation(op) {
+      if (currentNumber === '') return;
+      if (previousNumber !== '') calculate();
+      operation = op;
+      previousNumber = currentNumber;
+      currentNumber = '';
+    }
+
+    function calculate() {
+      let result;
+      let prev = parseFloat(previousNumber);
+      let curr = parseFloat(currentNumber);
+      if (isNaN(prev) || isNaN(curr)) return;
+
+      switch (operation) {
+        case '+': result = prev + curr; break;
+        case '-': result = prev - curr; break;
+        case '*': result = prev * curr; break;
+        case '/': result = prev / curr; break;
+        case '%': result = prev % curr; break;
+        case '^': result = Math.pow(prev, curr); break;
+        default: return;
+      }
+
+      currentNumber = result.toString();
+      operation = null;
+      previousNumber = '';
+      updateDisplay();
+    }
+
+    function sqrtNumber() {
+      if (currentNumber === '') return;
+      currentNumber = Math.sqrt(parseFloat(currentNumber)).toString();
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentNumber = '';
+      previousNumber = '';
+      operation = null;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      display.value = currentNumber;
+    }
+  </script>
+</body>
+</html>
